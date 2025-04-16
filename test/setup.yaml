@@ -1,0 +1,29 @@
+version: '3.1'
+services:
+  obrsql:
+    image: mysql
+    restart: always
+    ports:
+      - 3306:3306
+    volumes:
+      - data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 2Sa3p1QDoyJUxhAuEP0AlA
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: obr
+  obrsuite:
+    image: 213920689726.dkr.ecr.eu-north-1.amazonaws.com/obrpy:latest
+    ports:
+      - 8088:8088
+    depends_on:
+      - obrsql
+  obrweb:
+    image: 213920689726.dkr.ecr.eu-north-1.amazonaws.com/obrnpm:latest
+    ports:
+      - 3000:3000
+    depends_on:
+      - obrsuite
+volumes:
+    data:
+        driver: local
