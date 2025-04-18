@@ -1,7 +1,5 @@
 pipeline {
 
-	agent any
-
 	environment {
 		PY_REPO = 'obrpy'
 		NPM_REPO = 'obrnpm'
@@ -10,11 +8,6 @@ pipeline {
 	}
  
 	stages {
-
-		stage('setup'){
-        		def dockerHome = tool 'myDocker'
-        		env.PATH = "${dockerHome}/bin:${env.PATH}"
-    		}
 
 		stage("build") {
 

@@ -1,29 +1,39 @@
+// -- Imports required for state changes
 import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+/* Ideally this app would be separated into its constituent working parts and
+imported into this App.js file for compartmentalisation of functionality, though
+as this is just a generic base for testing I've opted out of doing that for brevity.
+*/
+
 function App() {
+    // -- Setting up state for rest modals and data such as userData
     const [data, setData] = useState([{}]);
     const [showModal, setShowModal] = useState(false);
     const [showAddModal, setShowAddModal] = useState(false);
     const [users, setUsers] = useState([]);
-    const [newUser, setNewUser] = useState({
-        name: '',
-        email: '',
-        password: ''
-    });
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
 
-    useEffect(() => {
-        fetch("/getall")
+    // -- Fetches all users from the obr MySQL database, used to populate table
+    const fetchUsers = async () => {
+            fetch("/get_all")
             .then(res => res.json())
             .then(data => {
                 if (!data.error) {
                     setUsers(data);
                 }
-            }
-        );
+            });
+    };
+
+    // -- Embedded within useEffect() to emulate jQuery refresh
+    useEffect(() => {
+        fetchUsers();
     }, []);
 
+    // -- Get connection data from flask route
     useEffect(() => {
         fetch("/connect").then(
             res => res.json()
@@ -35,22 +45,58 @@ function App() {
         )
     }, []);
 
-    const handleAddUserChange = (e) => {
-        const { name, value } = e.target;
-        setNewUser(prev => ({
-            ...prev,
-            [name]: value
-        }));
+    // -- Basic form submission handler for adding new users
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setShowAddModal(false);
+
+        // -- Prepare data to be sent to the flask route
+        const formData = { name, email };
+
+        try {
+            const response = await fetch('/set', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+        });
+
+        // -- Await result of POST request
+        const result = await response.json();
+        console.log(result);
+        } catch (error) {
+        console.error('Error submitting form:', error);
+        }
     };
 
-    const handleSubmitNewUser = () => {
-        console.log("Submitted user:", newUser);
-        setShowAddModal(false);
-        setNewUser({ name: '', email: '', password: '' });
-        // Optionally post to server
+    // -- Basic deletion handler for users, triggers whenever the bin button is pressed
+    const handleDelete = async (id) => {
+        try {
+            const response = await fetch('/delete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id }),
+            });
+
+            // -- Await result of POST request
+            const result = await response.json();
+
+            if (result.success) {
+                console.log("User deleted!")
+                fetchUsers();
+            } else {
+                console.error('Failed to delete user:', result.error);
+            }
+        } catch (error) {
+            console.error('Request failed:', error);
+        }
     };
 
     return (
+        // Basic layout for a basic app, I'm not a frontend dev...
         <div className="obr">
 
             <button className="check-data" onClick={() => setShowModal(true)}>Connection data</button>
@@ -78,6 +124,7 @@ function App() {
                             <div className="cell">{user.last_activity}</div>
 
                             <button
+                                onClick={() => handleDelete(user.id)}
                                 className="delete-btn"
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -117,28 +164,26 @@ function App() {
                             type="text"
                             name="name"
                             placeholder="Name"
-                            value={newUser.name}
-                            onChange={handleAddUserChange}
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
                             className="modal-input"
                         />
                         <input
                             type="email"
                             name="email"
                             placeholder="Email"
-                            value={newUser.email}
-                            onChange={handleAddUserChange}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             className="modal-input"
                         />
                         <input
                             type="password"
                             name="password"
                             placeholder="Password"
-                            value={newUser.password}
-                            onChange={handleAddUserChange}
                             className="modal-input"
                         />
 
-                        <button className="submit-btn" onClick={handleSubmitNewUser}>Submit</button>
+                        <button className="submit-btn" onClick={handleSubmit}>Submit</button>
                     </div>
                 </div>
              )}
