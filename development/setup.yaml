@@ -13,13 +13,13 @@ services:
       MYSQL_PASSWORD: password
       MYSQL_DATABASE: obr
   obrsuite:
-    image: 213920689726.dkr.ecr.eu-north-1.amazonaws.com/obrpy:latest
+    image: obrpy
     ports:
       - 8088:8088
     depends_on:
       - obrsql
   obrweb:
-    image: 213920689726.dkr.ecr.eu-north-1.amazonaws.com/obrnpm:latest
+    image: obrnpm
     ports:
       - 3000:3000
     depends_on:
