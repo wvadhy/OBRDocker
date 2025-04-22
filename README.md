@@ -6,7 +6,7 @@ NOTE: Docker daemon is required as a pre-requisite.
 
 ## Testing Setup
 
-1. Clone the test directory present on the master branch:
+1. Clone the directories present on the master branch:
 `git clone https://github.com/wvadhy/OBRDocker.git`
 
 2. Move into the cloned repository and run the [obrdocker] bash script:
@@ -24,7 +24,7 @@ will be created via the [dump] sql file.
 
 ## Development Setup
 
-1. Clone the test directory present on the master branch:
+1. Clone the directories present on the master branch:
 `git clone https://github.com/wvadhy/OBRDocker.git`
 
 2. Move into the cloned repository and enter the [pythonDocker] directory to run the following:
