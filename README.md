@@ -17,7 +17,7 @@ Open [http://localhost:3000](http://localhost:3000) to view the webpage in your 
 The bash file automates the creation of the docker-network and docker-containers by
 virtue of running docker-compose on the [setup] yaml file.
 
-![alt text](https://cdn.discordapp.com/attachments/1360249222909399121/1360249236746404022/image.png?ex=6801ae92&is=68005d12&hm=2efae7a22ab012693ca62f3200518c6f9afe97db740bf2658e66a077f04c2b1e&)
+![lol2255](https://github.com/user-attachments/assets/85bdd905-d42b-4b2b-8c9d-e18b8b4a52f1)
 
 Furthermore the creation of a barebones MySQL database based upon the schema shown above
 will be created via the [dump] sql file.
@@ -66,7 +66,7 @@ persistance simply remove the [volumes] parameter present within the [setup] yam
 
 ## Pipeline
 
-![altext](https://cdn.discordapp.com/attachments/1032728529588203560/1362423039727374486/Git_1.png?ex=680256d5&is=68010555&hm=4f9267de36d4ca3acfd30d98215f180e35d98205e225e8c3ca4bd4564c4920ea&)
+![lol2233](https://github.com/user-attachments/assets/2aa25407-b604-41fd-9e94-afe1629367a7)
 
 Files cloned from the [development] repository can be edited and changed on a local development
 server / device.
